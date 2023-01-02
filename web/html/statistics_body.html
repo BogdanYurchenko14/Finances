@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+<div class="statistics_page">
+  <p class="statistics_list">Статистика для счёта <?php echo $_COOKIE['account']." ". AccountClass::getCurrency(); ?> за</p>
+  <form class="statistics_year" action="../statistics_page.php" method="post">
+    <button type="submit" name="changeYear" value="-1" class="year_button"> < </button>
+    <label > <?php echo $_COOKIE['year'] ?></label>
+    <?php if($nextYear): ?>
+    <button type="submit" name="changeYear" value="1" class="year_button"> > </button>
+    <?php else: ?>
+    <label style="color: black"> > </label>
+    <?php endif; ?>
+  </form>
+
+
+  <form action="../detailed_statistics_page.php" method="post">
+    <div class="table_statistic">
+
+      <table class="statistics_table_year">
+
+        <tr class="table_head_statistics">
+          <?php foreach(BdRecordsClass::MONTH as $key => $month): ?>
+          <td colspan="2">
+            <button type="submit" value="<?php echo $key ?>" name="month" class="month_button"> <?php echo $month ?> </button>
+          </td>
+          <?php if($key % 3 == 0):?>
+        </tr>
+
+        <?php foreach($columns as $column_key =>  $column): ?>
+        <tr>
+          <?php for($i=0,$j=$key-2;$i<3;$i++,$j++): ?>
+          <td> <?php echo $column ?></td>
+          <td><?php if($column_key == 3 and $statistics["{$j}-total"]<0) echo 'style="background-color: #300303"'?> >
+          <?php if($column_key ==1) echo $statistics["{$j}-income"];
+                        else if($column_key == 2) echo "-". $statistics["{$j}-expense"];
+                        else echo $statistics["{$j}-total"];?>
+          </td>
+          <?php endfor; ?>
+        </tr>
+        <?php endforeach; ?>
+        <tr class="table_head_statistics">
+          <?php endif; ?>
+          <?php endforeach; ?>
+      </table>
+
+    </div>
+    <br>
+    <table class="statistics_table_year"; width="52.5%">
+      <tr class="table_head_statistics">
+        <td colspan="2" style="background-color: #1b0036; color: white;"> Итоги года: </td>
+      </tr>
+      <?php foreach($columns as $column): ?>
+      <tr>
+        <td> <?php echo $column ?></td>
+        <td><?php if($column=="Итог:" and $totalSum<0) echo 'style="background-color: #300303"'?><?php if($column == "Расходы:") echo "-".$sumOfAllExpense; else if($column == "Доходы:") echo  $sumOfAllIncome; else echo $totalSum ?></td>
+      </tr>
+      <?php endforeach; ?>
+    </table>
+  </form>
+
+</div>
+</body>
+</html>

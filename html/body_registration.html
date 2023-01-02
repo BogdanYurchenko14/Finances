@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="sign_in">
+<div>
+  <form name="form" action="../registration_page.php" onsubmit=" return check();" method="post">
+    <p class="sign_in_title">Регистрация</p>
+    <input type="text" name="username" placeholder="Логин" value="" if($_POST[username]!=null) echo $_POST[username] ?> </br>
+    <input type="email" name="email" placeholder="E-mail" value=""php if($_POST[email]!=null) echo $_POST[email] ?></br>
+    <input type="password" name="password"  placeholder="Пароль" value=""if($_POST[password]!=null) echo $_POST[password] ?></br>
+    <input type="password" name="password_2" placeholder="Повторите пароль" value=""if($_POST[password_2]!=null) echo $_POST[password_2] ?></br>
+
+    <button type="submit">Зарегистрироваться</button>
+    <p class="sign_in_other">Вы уже зарегистрированы? <a href="../login_page.php" class="other_page">Войти </a> </p>
+  </form>
+</div>
+</body>
+</html>
+<script language="JavaScript">
+
+
+  function check(){
+
+    var name = document.forms["form"]["username"].value;
+    var email = document.forms["form"]["email"].value;
+    var password = document.forms["form"]["password"].value;
+    var password_2 = document.forms["form"]["password_2"].value;
+    var text="";
+    var res= true;
+
+    if(name==="" || name===" "){
+      text="Введите логин";
+      res=false;
+    }
+    else if(name.length>30){
+      text="Логин не должен превышать 30 символов";
+      res=false;
+    }
+    else if(email==="" || email===" "){
+      text="Введите email";
+      res=false;
+    }
+    else if(password==="" || password===" "){
+      text="Введите пароль";
+      res=false;
+    }
+    else if(password.length<5){
+      text="Пароль должен состоять минимум из 5 символов";
+      res=false;
+    }
+    else if(password !== password_2){
+      text="Пароли не совпадают";
+      res=false;
+    }
+
+    if(!res){
+      window.alert(text);
+      return false;
+    }
+    else
+      return true;
+  }
+  if($warning)
+  setTimeout(function () {
+    window.alert("Имя пользователя или адрес электронный почты занят"); }, 200);
+</script>
+</html>

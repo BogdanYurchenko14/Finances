@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="content">
+
+  <p class="list"><?php echo $listName;?></p>
+  <p class="heading">Таблица</p>
+  <?php if(!AuthorizationClass::isAutorized()): ?>
+  <p class="warning"><?php echo $listName;?> доступен только <label style="color: #ac6ee8">авторизованным</label> пользователям</p>
+  <?php else:?>
+  <p class="warning">Вы смотрите на <?php echo $listName;?> для счёта <label style="color: #ac6ee8"> <?php echo $_COOKIE['account']." ". AccountClass::getCurrency(); ?> </label></p>
+  <?php endif; ?>
+  <div class="tables">
+
+    <table class="bd_list">
+      <thead class="table_head">
+      <tr>
+        <th>Название</th>
+        <th>Категория</th>
+        <th>Стоимость</th>
+        <th>Дата</th>
+      </tr>
+      </thead>
+      <tbody class="table_body">
+      <?php foreach ($all_expense as $row): ?>
+      <tr>
+        <td><?php echo $row['name'];?></td>
+        <td><?php echo $row["category"];?></td>
+        <td><?php echo $row["count"];?></td>
+        <td style="width: 25%"><?php echo $row["date"];?></td>
+      </tr>
+      <?php endforeach; ?>
+      </tbody>
+    </table>
+
+    <div class="filter">
+      <form method="post" action= <?php echo $fileName?> onsubmit="return check_autorization();">
+        <table class="options">
+          <tr>
+            <th>Настройка</th>
+          </tr>
+          <tr><td style="color:black">___________________</td></tr>
+          <tr>
+            <td> Выводить за последний </td>
+          <tr>
+            <td> <select class="option_choice" name="date_filter">
+
+              <?php foreach(BdRecordsClass::DATE_FILTER as $key => $value): ?>
+              <option value= <?php echo $key ?> <?php if($_COOKIE['date_filter'] == $key){ echo 'selected';}?> ><?php echo $value ?> </option>
+              <?php endforeach; ?>
+
+            </select></td>
+
+          </tr>
+          <tr>
+            <td>  Настройка категорий </td>
+          </tr>
+
+          <tr>
+            <td> <select class="option_choice" name="category_filter">
+
+              <option value= "all" > Все </option>
+              <?php foreach($category as  $key => $value): ?>
+              <option value= <?php echo $key ?> <?php if($_COOKIE['category_filter'] == $key){ echo 'selected';}?> ><?php echo $value ?> </option>
+              <?php endforeach; ?>
+
+            </select></td>
+
+          </tr>
+          <tr>
+            <td><button type="submit" class="submit_button">Применить</button></td>
+          </tr>
+      </form>
+      <form onsubmit="return check_autorization();" action=if($fileName >== expense_page.php){ echo expense_write_page.php;} else {echo 'income_write_page.php';}?
+      <tr>
+        <td> <button type="submit" class="add">Добавить в список</button></td>
+      </tr>
+      </form>
+      </table>
+      <div class="sum">
+        Общая сумма:
+        <div class="count">
+          <?php echo $sum  ?>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</body>
+<script language="JavaScript">
+  function check_autorization()
+  {
+      if(isset($_COOKIE["username"]))
+      if(BdRecordsClass::getRecords('account')==null)
+      window.alert("У вас нет счёта");
+      else
+      return true;
+
+
+      else {
+        window.alert("Вы не авторизированы")
+      }
+      return false;
+  }
+</script>
+</html>

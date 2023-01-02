@@ -1,0 +1,45 @@
+<?php require_once 'AuthorizationClass.php';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><?php echo $title ?></title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+
+<header>
+
+  <label class="header_category">
+    <a href="../main_page.php" class="main"> Главная </a>
+    <a href="../expense_page.php" class="expense"> Расходы </a>
+    <a href="../income_page.php" class="income">Доходы </a>
+    <php if(AuthorizationClass.php::isAutorized()): ?>
+    <a href="../statistics_page.php" class="statistics">Статистика </a>
+    <label style="color:#8841ce;">Баланс: <php if(!isset($_COOKIE[account])) echo AuthorizationClass::getBalance($accounts[0][name]); else echo AuthorizationClass::getBalance();  ?>
+      <form method="post" class="form_currency" action="../change_currency.php">
+        <select class="currency" onchange="this.form.submit()" name="currency">
+          <option value="RUB" ><php if($_COOKIE[currency]=='RUB') echo selected ?>₽</option>
+          <option  value="USD" ><php if($_COOKIE[currency echo selected ?>$</option>
+          <option  value="EUR" ><php if($_COOKIE[currency]=='EUR') echo selected ?>€</option>
+        </select>
+      </form>
+    </label>
+    <php else:?>
+    <label class="statistics" style="color: #999999">Статистика </label>
+    <php endif;?>
+
+    <php if(AuthorizationClass::isAutorized()): ?>
+    <label class = "username"><php echo $_COOKIE[username] ?> <img src="pic/user.png"class="user_pic"> /
+      <a class="other" href="../log_out.php" onclick="return confirm('Вы уверены, что хотите выйти?')">Выйти</a>
+    </label>
+      <php else: >
+    <label class="username">  <a href="../registration_page.php" class="other"> Зарегистрироваться </a>  /   <a href="../login_page.php" class="other">Войти </a></label>
+      <php endif; >
+    </label>
+
+
+</header>
+<script>
+</script>
